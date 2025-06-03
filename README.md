@@ -47,6 +47,12 @@ java -cp $ASYNC_PROFILER_CONVERTER_PATH/converter.jar jfr2flame cpu.jfr --classi
 
 ## Run as Docker
 
+Build:
+
+```shell
+docker build -f src/main/docker/Dockerfile.jvm -t radcortez/write-efficient-code .
+```
+
 ```shell
  docker run -i --rm -p 8080:8080 -e JAVA_OPTS="-agentpath:/home/jboss/async-profiler/build/lib/libasyncProfiler.so=start,alloc=1,total,event=alloc,file=/home/jboss/profiler-data/alloc.jfr  -XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -XX:-UseTLAB -Xmx1G -Xms1G -XX:+AlwaysPreTouch" -v ./target/profiler-data:/home/jboss/profiler-data --privileged radcortez/write-efficient-code
 ```
