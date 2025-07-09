@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static java.util.stream.Collectors.toList;
-
-@Path("/greeting")
+@Path("/")
 public class GreetingResource {
     private final List<String> names;
 
@@ -21,37 +19,58 @@ public class GreetingResource {
         Faker faker = new Faker();
         Name name = faker.name();
         names = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 1000; i++) {
             names.add(name.firstName());
         }
     }
 
     @GET
-    @Path("/{greet}")
-    public Response greet(@PathParam("greet") String greet) {
+    @Path("/one/{greet}")
+    public Response one(@PathParam("greet") String greet) {
         return Response.ok(solutionOne(greet, names)).build();
+    }
+
+    @GET
+    @Path("/two/{greet}")
+    public Response two(@PathParam("greet") String greet) {
+        return Response.ok(solutionTwo(greet, names)).build();
+    }
+
+    @GET
+    @Path("/three/{greet}")
+    public Response three(@PathParam("greet") String greet) {
+        return Response.ok(solutionThree(greet, names)).build();
     }
 
     List<String> solutionOne(
             String prefix,
             List<String> names) {
 
-        return names.stream()
+        return names.parallelStream()
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String s) {
-                        return new StringBuilder(prefix).append(s).toString();
+                        return new StringBuilder(prefix).append(" ").append(s).toString();
                     }
                 })
-                .collect(toList());
+                .toList();
+    }
+
+    List<String> solutionTwo(String prefix, List<String> names) {
+        List<String> newNames = new ArrayList<>();
+        for (String name : names) {
+            newNames.add(new StringBuilder(prefix).append(name).toString());
+        }
+        return newNames;
     }
 
     List<String> solutionThree(String prefix, List<String> names) {
         List<String> newNames = new ArrayList<>((int) ((float) names.size() / 0.75f + 1.0f));
-        StringBuilder builder = new StringBuilder().append("name").append(".");
+        StringBuilder builder = new StringBuilder().append(prefix).append(" ");
+        int length = builder.length();
         for (String name : names) {
             newNames.add(builder.append(name).toString());
-            builder.setLength(5);
+            builder.setLength(length);
         }
         return newNames;
     }
