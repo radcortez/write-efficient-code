@@ -20,7 +20,7 @@ public class Prefixes {
 
     @org.openjdk.jmh.annotations.State(value = Scope.Benchmark)
     public static class State {
-        String prefix = "Hi, ";
+        String prefix = "Hi ";
         List<String> names = generate();
 
         static List<String> generate() {
@@ -56,24 +56,25 @@ public class Prefixes {
             String prefix,
             List<String> names) {
         return names.stream()
-                .map(name -> prefix + "." + name)
+                .map(name -> prefix + name)
                 .collect(toList());
     }
 
     List<String> solutionTwo(String prefix, List<String> names) {
         List<String> newNames = new ArrayList<>();
         for (String name : names) {
-            newNames.add(new StringBuilder(prefix).append(".").append(name).toString());
+            newNames.add(new StringBuilder(prefix).append(name).toString());
         }
         return newNames;
     }
 
     List<String> solutionThree(String prefix, List<String> names) {
         List<String> newNames = new ArrayList<>((int) ((float) names.size() / 0.75f + 1.0f));
-        StringBuilder builder = new StringBuilder().append(prefix).append(" ");
+        StringBuilder builder = new StringBuilder().append(prefix);
+        int length = builder.length();
         for (String name : names) {
             newNames.add(builder.append(name).toString());
-            builder.setLength(5);
+            builder.setLength(length);
         }
         return newNames;
     }
