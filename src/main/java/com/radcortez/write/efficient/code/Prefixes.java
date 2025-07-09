@@ -11,8 +11,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Fork(value = 1)
-@Warmup(iterations = 1, time = 1)
-@Measurement(iterations = 1, time = 1)
+@Warmup(iterations = 3, time = 1)
+@Measurement(iterations = 3, time = 1)
 public class Prefixes {
     public static void main(String[] args) throws Exception {
         org.openjdk.jmh.Main.main(new String[] {"Prefixes"});
