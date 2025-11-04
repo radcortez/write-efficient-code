@@ -46,7 +46,7 @@ public class GreetingResource {
             String prefix,
             List<String> names) {
 
-        return names.parallelStream()
+        return names.stream()
                 .map(new Function<String, String>() {
                     @Override
                     public String apply(String s) {
