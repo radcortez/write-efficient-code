@@ -20,26 +20,24 @@ public class EnvNames {
 
     @org.openjdk.jmh.annotations.State(value = Scope.Benchmark)
     public static class StateOriginal {
-        String name = "my.configuration.property";
-        Map<String, String> properties = Map.of(name, "value");
+        Map<String, String> properties = Map.of("MY_CONFIGURATION_PROPERTY", "value");
     }
 
     @org.openjdk.jmh.annotations.State(value = Scope.Benchmark)
     public static class State {
-        String name = "my.configuration.property";
-        Map<EnvName, String> properties = Map.of(new EnvName(name), "value");
+        Map<EnvName, String> properties = Map.of(new EnvName("MY_CONFIGURATION_PROPERTY"), "value");
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     public void getValueOriginal(StateOriginal state, Blackhole blackhole) {
-        blackhole.consume(getValueOriginal(state.name, state.properties));
+        blackhole.consume(getValueOriginal("my.configuration.property", state.properties));
     }
 
     @Benchmark
     @BenchmarkMode(Mode.Throughput)
     public void getValue(State state, Blackhole blackhole) {
-        blackhole.consume(getValue(state.name, state.properties));
+        blackhole.consume(getValue("my.configuration.property", state.properties));
     }
 
     private String getValueOriginal(String name, Map<String, String> properties) {
